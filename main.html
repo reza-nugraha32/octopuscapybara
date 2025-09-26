@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dearest Aya</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: "Georgia", serif;
+      background: linear-gradient(135deg, #ffe5d9, #ffd6c2);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Red Panda in the corner */
+    .background-gif {
+      position: absolute;
+      bottom: 20vh;
+      right: 15vw;
+      z-index: 999;
+    }
+    .background-gif img {
+      width: 180px;
+      height: auto;
+      opacity: 1;
+    }
+
+    /* Capybara walking */
+    .capybara {
+      position: absolute;
+      bottom: 0;
+      left: -200px; /* start off-screen */
+      width: 150px;
+      height: auto;
+      z-index: 9999;
+      animation: walkAcross 25s linear infinite;
+    }
+    @keyframes walkAcross {
+      0% { left: -250px; transform: scaleX(-1); }
+      45% { left: 100vw; transform: scaleX(-1); }
+      50% { left: 100vw; transform: scaleX(1); } /* turn around */
+      95% { left: -250px; transform: scaleX(1); }
+      100% { left: -250px; transform: scaleX(-1); }
+    }
+
+    /* Butterfly flying */
+    .butterfly {
+      position: absolute;
+      height: auto;
+      z-index: 999;
+      pointer-events: none;
+      transition: transform 3s ease-in-out;
+    }
+
+    /* Floating love letters */
+    .love-letter {
+      position: absolute;
+      font-size: 1.8rem;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+      color: #ff8fa3;
+      pointer-events: none;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 0.9; }
+      50% { opacity: 1; transform: translateY(-150px) scale(1.2); }
+      100% { transform: translateY(-300px) scale(0.9); opacity: 0; }
+    }
+
+    /* Book (card) */
+    .book {
+      width: 50vw;
+      height: 30vh;
+      position: relative;
+      perspective: 2000px;
+      z-index: 5;
+    }
+
+    /* Generic page styling */
+    .page,
+    .static-page {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 2px solid #ffb4a2;
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(255, 105, 97, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Static page (doesn’t flip) */
+    .static-page {
+      background: #fff7f0;
+      color: #a44;
+      z-index: 1; /* sits under the cover */
+      pointer-events: none;
+    }
+
+    /* Flippable cover page */
+    .page {
+      transform-origin: left center;
+      transition: transform 1s ease-in-out;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .page .front,
+    .page .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid #ffb4a2;
+      border-radius: 14px;
+    }
+    .page .front {
+      background: #fff0e6;
+      color: #a44;
+    }
+    .page .back {
+      background: #ffe6eb;
+      color: #b33;
+      transform: rotateY(180deg);
+    }
+    .open {
+      transform: rotateY(-180deg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Red Panda GIF -->
+  <div class="background-gif">
+    <img src="red-panda-sleeping.gif" alt="Red Panda">
+  </div>
+
+  <!-- Walking Capybara -->
+  <img src="capybara.gif" alt="Capybara" class="capybara">
+
+  <!-- Container for butterflies -->
+  <div id="butterflies"></div>
+
+  <!-- Container for floating love letters -->
+  <div id="love-letters"></div>
+
+  <!-- Book (card) -->
+  <div class="book">
+    <!-- Static page behind the cover -->
+    <div class="static-page">
+      Aya, you are the sweetest chapter in my book ❤️<br><br>
+        With love,<br>Reza
+    </div>
+
+    <!-- Flippable cover -->
+    <div class="page" id="cover">
+      <div class="front">
+        <pre>For Dearest Ayaa💕</pre>
+        <pre><small>(click to open)</small></pre>
+      </div>
+      <div class="back">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Cover flipping
+    const cover = document.getElementById("cover");
+    cover.addEventListener("click", () => {
+      cover.classList.toggle("open");
+    });
+
+    // Multiple butterflies
+    const butterflyContainer = document.getElementById("butterflies");
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
+    function createButterfly() {
+      const butterfly = document.createElement("img");
+      butterfly.src = "butterfly.gif";
+      butterfly.classList.add("butterfly");
+
+      // random size between 60px and 130px
+      const size = 60 + Math.random() * 70;
+      butterfly.style.width = size + "px";
+
+      // random flip
+      const flipped = Math.random() > 0.5;
+      butterfly.dataset.flip = flipped;
+
+      butterflyContainer.appendChild(butterfly);
+
+      function moveButterfly() {
+        const x = Math.random() * (screenW - size);
+        const y = Math.random() * (screenH - size);
+        const flip = flipped ? "scaleX(-1)" : "scaleX(1)";
+        butterfly.style.transform = `${flip} translate(${x}px, ${y}px)`;
+      }
+
+      moveButterfly();
+      setInterval(moveButterfly, 2000 + Math.random() * 3000);
+    }
+
+    // Create 5 butterflies
+    for (let i = 0; i < 5; i++) {
+      createButterfly();
+    }
+
+    // Floating love letters
+    const loveLettersContainer = document.getElementById("love-letters");
+    const letters = ["💌", "❤️", "💕", "💖", "😘", "✨"];
+
+    function createLoveLetter() {
+      const letter = document.createElement("div");
+      letter.classList.add("love-letter");
+      letter.textContent = letters[Math.floor(Math.random() * letters.length)];
+
+      // random horizontal start
+      letter.style.left = Math.random() * window.innerWidth + "px";
+      letter.style.bottom = "-40px";
+
+      loveLettersContainer.appendChild(letter);
+
+      // remove after animation
+      setTimeout(() => {
+        letter.remove();
+      }, 6000);
+    }
+
+    // spawn love letters every 2.5s
+    setInterval(createLoveLetter, 2500);
+  </script>
+</body>
+</html>
