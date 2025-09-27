@@ -74,8 +74,8 @@
 
     /* Book (card) */
     .book {
-      width: 50vw;
-      height: 30vh;
+      width: 70vw;
+      height: 70vh;
       position: relative;
       perspective: 2000px;
       z-index: 5;
@@ -92,29 +92,45 @@
       border: 2px solid #ffb4a2;
       border-radius: 14px;
       box-shadow: 0 8px 20px rgba(255, 105, 97, 0.2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
       font-size: 1.2rem;
       padding: 20px;
-      text-align: center;
+      box-sizing: border-box;
     }
 
-    /* Static page (doesn’t flip) */
+    /* Static page (scrollable letter) */
     .static-page {
       background: #fff7f0;
       color: #a44;
-      z-index: 1; /* sits under the cover */
-      pointer-events: none;
+      z-index: 1;
+      pointer-events: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      text-align: left;
+      line-height: 1.6;
+      padding: 2em;
+      font-size: 12pt;
+    }
+
+    .static-page p {
+      margin: 0 0 1rem;
+    }
+
+    .static-page ul {
+      padding-left: 20px;
+      margin: 0 0 1rem;
     }
 
     /* Flippable cover page */
     .page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       transform-origin: left center;
       transition: transform 1s ease-in-out;
       transform-style: preserve-3d;
       cursor: pointer;
       z-index: 2;
+      text-align: center;
     }
     .page .front,
     .page .back {
@@ -128,9 +144,8 @@
       align-items: center;
       font-size: 1.2rem;
       padding: 20px;
-      text-align: center;
+      box-sizing: border-box;
       border: 2px solid #ffb4a2;
-      border-radius: 14px;
     }
     .page .front {
       background: #fff0e6;
@@ -165,35 +180,34 @@
   <div class="book">
     <!-- Static page behind the cover -->
     <div class="static-page">
-      <p>Dearest Aya,</p>
+      <p><em>Dearest Aya,</em></p>
 
-  <p>I must tell you how deeply I love and adore you. Though we’ve known each other only a short while, it’s been so easy to fall for someone as beautiful, warm, and gentle as you. Every time we talk, your soft voice calms me and makes me feel vulnerable in the best way. The thought of losing what we have is something I can’t fathom.</p>
+      <p>I must tell you how deeply I love and adore you. Though we’ve known each other only a short while, it’s been so easy to fall for someone as beautiful, warm, and gentle as you. Every time we talk, your soft voice calms me and makes me feel vulnerable in the best way. The thought of losing what we have is something I can’t fathom.</p>
 
-  <p>Will you be my lovely girlfriend?</p>
+      <p>Will you be my lovely girlfriend?💕</p>
 
-  <p>If you say yes, I promise:</p>
+      <p>If you say yes, I promise:</p>
 
-  <ul>
-    <li>Be the best boyfriend you'll ever have: I'll be open, honest, protect and support you the best I could.</li>
-    <li>Be all ears for each and all your story, and make time for it even if I'm busy.</li>
-    <li>Be your company to cute and artsy places you want to see, and give you cute gifts.</li>
-    <li>Always respect your feelings and give you space when you need it.</li>
-    <li>Grow together, learning from each other every day.</li>
-    <li>Never take you for granted, and remind you often how much you mean to me.</li>
-    <li>When the time is right, take you to meet my parents.</li>
-  </ul>
+      <ul>
+        <li>Be the best boyfriend you'll ever have: I'll be open, honest, protect and support you the best I could.</li>
+        <li>Be all ears for each and all your story, and make time for it even if I'm busy.</li>
+        <li>Be your company to cute and artsy places you want to see, and give you cute gifts.</li>
+        <li>Always respect your feelings and give you space when you need it.</li>
+        <li>Grow together, learning from each other every day.</li>
+        <li>Never take you for granted, and remind you often how much you mean to me.</li>
+        <li>When the time is right, take you to meet my parents.</li>
+      </ul>
 
-  <p>With all my heart,<br>Reza</p>
+      <p>With all my heart,<br>Reza</p>
     </div>
 
     <!-- Flippable cover -->
     <div class="page" id="cover">
       <div class="front">
-        <pre>For Dearest Ayaa💕</pre>
+        <pre>For Dearest Aya 💕</pre>
         <pre><small>(click to open)</small></pre>
       </div>
-      <div class="back">
-      </div>
+      <div class="back"></div>
     </div>
   </div>
 
@@ -214,11 +228,9 @@
       butterfly.src = "butterfly.gif";
       butterfly.classList.add("butterfly");
 
-      // random size between 60px and 130px
       const size = 60 + Math.random() * 70;
       butterfly.style.width = size + "px";
 
-      // random flip
       const flipped = Math.random() > 0.5;
       butterfly.dataset.flip = flipped;
 
@@ -235,7 +247,6 @@
       setInterval(moveButterfly, 2000 + Math.random() * 3000);
     }
 
-    // Create 5 butterflies
     for (let i = 0; i < 5; i++) {
       createButterfly();
     }
@@ -248,22 +259,13 @@
       const letter = document.createElement("div");
       letter.classList.add("love-letter");
       letter.textContent = letters[Math.floor(Math.random() * letters.length)];
-
-      // random horizontal start
       letter.style.left = Math.random() * window.innerWidth + "px";
       letter.style.bottom = "-40px";
-
       loveLettersContainer.appendChild(letter);
-
-      // remove after animation
-      setTimeout(() => {
-        letter.remove();
-      }, 6000);
+      setTimeout(() => letter.remove(), 6000);
     }
 
-    // spawn love letters every 2.5s
     setInterval(createLoveLetter, 2500);
   </script>
 </body>
 </html>
-
